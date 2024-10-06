@@ -1,4 +1,4 @@
-package main
+package ipv6
 
 import (
 	"fmt"
@@ -6,14 +6,14 @@ import (
 	"strings"
 )
 
-func main() {
+func GetIPv6Prefix() {
 	interfaces, err := net.Interfaces()
 	if err != nil {
 		fmt.Println("Error:", err)
 		return
 	}
 
-	fmt.Println("List ipv6 addrs:")
+	fmt.Println("> List ipv6 addrs:")
 
 	for _, iface := range interfaces {
 		addrs, err := iface.Addrs()
@@ -21,7 +21,6 @@ func main() {
 			fmt.Println("Error:", err)
 			continue
 		}
-		// fmt.Println(iface)
 		for _, addr := range addrs {
 			ipNet, ok := addr.(*net.IPNet)
 			if ok && ipNet.IP.To4() == nil && ipNet.IP.To16() != nil {
