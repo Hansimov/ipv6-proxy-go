@@ -13,11 +13,7 @@ type IPv6Info struct {
 	MaskBits int
 }
 
-type Args struct {
-	Verbose bool
-}
-
-func GetIPv6Info(args Args) IPv6Info {
+func GetIPv6Info(verbose bool) IPv6Info {
 	var ipv6_infos []IPv6Info
 
 	interfaces, err := net.Interfaces()
@@ -43,7 +39,7 @@ func GetIPv6Info(args Args) IPv6Info {
 				prefix = strings.TrimRight(prefix, ":")
 				netint := iface.Name
 				if strings.HasPrefix(ip_addr, "2") {
-					if args.Verbose {
+					if verbose {
 						fmt.Printf("  * %s: %s\n", netint, ip_addr)
 						fmt.Printf("    %s: %s [/%d]\n", netint, prefix, mask_bits)
 					}

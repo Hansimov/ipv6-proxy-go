@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	ipv6_info := ipv6.GetIPv6Info(ipv6.Args{Verbose: false})
+	ipv6_info := ipv6.GetIPv6Info(false)
 	pretty_json, _ := json.MarshalIndent(ipv6_info, "", "  ")
 	fmt.Println(string(pretty_json))
 }
