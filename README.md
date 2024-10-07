@@ -1,10 +1,24 @@
 # ipv6-proxy-go
 A service in go to proxy network requests with ipv6 addrs
 
-## Init
+## Setup
+
+Init:
 
 ```sh
 go mod init ipv6-proxy-go
+```
+
+Setup:
+ 
+```sh
+go mod tidy
+```
+
+## Install dependencies
+
+```sh
+go mod download
 ```
 
 ## Test ipv6
@@ -17,12 +31,13 @@ go run tests/test_ipv6/test.go
 
 ```sh
 go run apps/server/app.go
+# go run apps/server/app.go -p 12333
 ```
 
-which would output:
+This would output:
 
 ```sh
-+ Starting server on port 12333...
++ Starting ForwardRequest server on port: [12333]
 ```
 
 and use curl:
@@ -31,4 +46,4 @@ and use curl:
 curl --proxy http://127.0.0.1:12333 http://test.ipw.cn
 ```
 
-which would output a random ipv6 addr.
+This should output the generated random ipv6 addr.
