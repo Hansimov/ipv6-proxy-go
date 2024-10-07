@@ -14,15 +14,10 @@ type IPv6Info struct {
 }
 
 func GetIPv6Info(verbose bool) IPv6Info {
-	var ipv6_infos []IPv6Info
-
-	interfaces, err := net.Interfaces()
-	if err != nil {
-		fmt.Println("× Error:", err)
-		return IPv6Info{}
-	}
-
 	fmt.Println("> Get ipv6 addrs:")
+
+	var ipv6_infos []IPv6Info
+	interfaces, _ := net.Interfaces()
 
 	for _, iface := range interfaces {
 		addrs, err := iface.Addrs()

@@ -8,6 +8,7 @@ import (
 )
 
 func GenerateRandomIPv6(prefix string, mask_bits int, verbose bool) string {
+	fmt.Println("> Generate random ipv6:")
 	seg_num := (128 - mask_bits) / 16
 	var segs []string
 	for i := 0; i < seg_num; i++ {
@@ -20,5 +21,8 @@ func GenerateRandomIPv6(prefix string, mask_bits int, verbose bool) string {
 	}
 	suffix := strings.Join(segs, ":")
 	random_ipv6 := prefix + ":" + suffix
+	if verbose {
+		fmt.Println("  *", random_ipv6)
+	}
 	return random_ipv6
 }
