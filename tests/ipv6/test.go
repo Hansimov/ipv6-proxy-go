@@ -14,4 +14,4 @@ func main() {
 	ipv6.CheckIPAddress(random_ipv6, true)
 }
 
-// go run main.go
+// go run tests/ipv6/test.go
