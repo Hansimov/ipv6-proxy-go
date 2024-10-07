@@ -6,34 +6,60 @@ import (
 	"strings"
 )
 
-func GetIPv6Prefix() {
+type IPv6Info struct {
+	Netint   string
+	Addr     string
+	Prefix   string
+	MaskBits int
+}
+
+type Args struct {
+	Verbose bool
+}
+
+func GetIPv6Info(args Args) IPv6Info {
+	var ipv6_infos []IPv6Info
+
 	interfaces, err := net.Interfaces()
 	if err != nil {
-		fmt.Println("Error:", err)
-		return
+		fmt.Println("× Error:", err)
+		return IPv6Info{}
 	}
 
-	fmt.Println("> List ipv6 addrs:")
+	fmt.Println("> Get ipv6 addrs:")
 
 	for _, iface := range interfaces {
 		addrs, err := iface.Addrs()
 		if err != nil {
-			fmt.Println("Error:", err)
+			fmt.Println("× Error:", err)
 			continue
 		}
 		for _, addr := range addrs {
-			ipNet, ok := addr.(*net.IPNet)
-			if ok && ipNet.IP.To4() == nil && ipNet.IP.To16() != nil {
-				ipStr := ipNet.IP.String()
-				mask_ones, _ := ipNet.Mask.Size()
-				prefix := ipNet.IP.Mask(ipNet.Mask).String()
+			ip_net, ok := addr.(*net.IPNet)
+			if ok && ip_net.IP.To4() == nil && ip_net.IP.To16() != nil {
+				ip_addr := ip_net.IP.String()
+				mask_bits, _ := ip_net.Mask.Size()
+				prefix := ip_net.IP.Mask(ip_net.Mask).String()
 				prefix = strings.TrimRight(prefix, ":")
-				if strings.HasPrefix(ipStr, "2") {
-					fmt.Printf("  * %s: %s\n", iface.Name, ipStr)
-					fmt.Printf("    %s: %s [/%d]\n", iface.Name, prefix, mask_ones)
-					break
+				netint := iface.Name
+				if strings.HasPrefix(ip_addr, "2") {
+					if args.Verbose {
+						fmt.Printf("  * %s: %s\n", netint, ip_addr)
+						fmt.Printf("    %s: %s [/%d]\n", netint, prefix, mask_bits)
+					}
+					ipv6_info := IPv6Info{
+						Netint:   netint,
+						Addr:     ip_addr,
+						Prefix:   prefix,
+						MaskBits: mask_bits,
+					}
+					ipv6_infos = append(ipv6_infos, ipv6_info)
 				}
 			}
 		}
 	}
+	if len(ipv6_infos) > 0 {
+		return ipv6_infos[0]
+	}
+	return IPv6Info{}
 }
